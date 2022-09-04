@@ -16,11 +16,11 @@ def load_data(messages_filepath, categories_filepath):
         df (pandas dataframe): merged data
     """
     # load messages dataset
-    messages = pd.read_csv("messages.csv")
+    messages = pd.read_csv(messages_filepath)
     messages.head()
 
     # load categories dataset
-    categories = pd.read_csv("categories.csv")
+    categories = pd.read_csv(categories_filepath)
     categories.head()
 
     # merge datasets
@@ -71,7 +71,7 @@ def clean_data(df):
     # remove duplicates
     # drop duplicates
     df_dedup = df.drop_duplicates()
-    
+
     return df_dedup
 
 
