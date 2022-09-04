@@ -9,11 +9,11 @@ def load_data(messages_filepath, categories_filepath):
     This function is to load the messages and categories files into two data frames, then merge the messages and categories datasets using the common id.
 
     Args:
-        messages_filepath:      string of messages file path
-        categories_filepath:   string of categories file path
+        messages_filepath (string):     messages file path
+        categories_filepath (string):   categories file path
 
     Returns:
-        Pandas dataframe of merged data
+        df (pandas dataframe): merged data
     """
     # load messages dataset
     messages = pd.read_csv("messages.csv")
@@ -34,10 +34,10 @@ def clean_data(df):
     This function is to clear the merged data
 
     Args:
-        df: Pandas dataset
+        df (pandas dataframe): source dataset.
 
     Returns:
-        df: cleaned Pandas dataset.
+        df (pandas dataframe): cleaned dataset.
     """
     # create a dataframe of the 36 individual category columns
     categories = df["categories"].str.split(";", expand=True)
@@ -69,14 +69,10 @@ def clean_data(df):
     df = pd.concat([df, categories], axis=1)
 
     # remove duplicates
-    # check number of duplicates
-    df.duplicated().sum()
     # drop duplicates
-    df.drop_duplicates()
-    # check number of duplicates
-    df.duplicated().sum()
-
-    return df
+    df_dedup = df.drop_duplicates()
+    
+    return df_dedup
 
 
 def save_data(df, database_filename):
@@ -84,13 +80,13 @@ def save_data(df, database_filename):
     This function is to save the clean dataset into a sqlite database
 
     Args:
-        df: Pandas dataset
-        database_filename: destination sqlite database location
+        df (pandas dataframe): dataframe to save
+        database_filename (string): destination sqlite database location
 
     Returns:
         None
     """
-    engine = create_engine("sqlite:///InsertDatabaseName.db")
+    engine = create_engine("sqlite:///{}".format(database_filename))
     df.to_sql("DisasterResponse", engine, index=False, if_exists="replace")
 
     return
